@@ -40,4 +40,16 @@ impl MainCollection {
             self.count += 1;
         }
     }
+
+    fn average(&self) -> f32 {
+        self.sum / self.count as f32
+    }
+
+    fn variance(&self) -> f32 {
+        self.sum_squares / self.count as f32 - self.average().powi(2)
+    }
+
+    fn last(&self) -> Option<f32> {
+        self.queue.back().copied()
+    }
 }
