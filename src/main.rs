@@ -1,4 +1,4 @@
-mod sortable_f32;
+mod sortable;
 mod rolling_stats;
 
 use rolling_stats::RollingStats;

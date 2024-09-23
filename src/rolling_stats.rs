@@ -1,8 +1,8 @@
 use std::collections::{BTreeMap, VecDeque};
-use crate::sortable_f32::SortableF32;
+use crate::sortable::Sortable;
 
 struct MinMaxIndex {
-    items: BTreeMap<SortableF32, u32>,
+    items: BTreeMap<Sortable<f32>, u32>,
 }
 
 impl MinMaxIndex {
@@ -11,15 +11,15 @@ impl MinMaxIndex {
     }
 
     fn insert_item(&mut self, key: f32) {
-        *self.items.entry(SortableF32(key)).or_insert(0) += 1;
+        *self.items.entry(Sortable(key)).or_insert(0) += 1;
     }
 
     fn remove_item(&mut self, key: f32) {
-        if let Some(count) = self.items.get_mut(&SortableF32(key)) {
+        if let Some(count) = self.items.get_mut(&Sortable(key)) {
             if *count > 1 {
                 *count -= 1;
             } else {
-                self.items.remove(&SortableF32(key));
+                self.items.remove(&Sortable(key));
             }
         }
     }
