@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, VecDeque};
 use crate::sortable::Sortable;
 
 struct MinMaxIndex {
-    items: BTreeMap<Sortable<f32>, u32>,
+    items: BTreeMap<Sortable<f64>, u32>,
 }
 
 impl MinMaxIndex {
@@ -10,11 +10,11 @@ impl MinMaxIndex {
         Self { items: BTreeMap::new() }
     }
 
-    fn insert_item(&mut self, key: f32) {
+    fn insert_item(&mut self, key: f64) {
         *self.items.entry(Sortable(key)).or_insert(0) += 1;
     }
 
-    fn remove_item(&mut self, key: f32) {
+    fn remove_item(&mut self, key: f64) {
         if let Some(count) = self.items.get_mut(&Sortable(key)) {
             if *count > 1 {
                 *count -= 1;
@@ -24,29 +24,29 @@ impl MinMaxIndex {
         }
     }
 
-    fn get_min(&self) -> Option<f32> {
+    fn get_min(&self) -> Option<f64> {
         self.items.keys().next().map(|value| value.0)
     }
 
-    fn get_max(&self) -> Option<f32> {
+    fn get_max(&self) -> Option<f64> {
         self.items.keys().next_back().map(|value| value.0)
     }
 }
 
 #[derive(Debug)]
 pub struct StatsData {
-    average: f32,
-    variance: f32,
-    last: f32,
-    min: f32,
-    max: f32,
+    average: f64,
+    variance: f64,
+    last: f64,
+    min: f64,
+    max: f64,
 }
 
 pub struct RollingStats {
-    queue: VecDeque<f32>,
+    queue: VecDeque<f64>,
     max_size: u32,
-    sum: f32,
-    sum_squares: f32,
+    sum: f64,
+    sum_squares: f64,
     index: MinMaxIndex,
 }
 
@@ -61,7 +61,7 @@ impl RollingStats {
         }
     }
 
-    pub fn add_items(&mut self, items: Vec<f32>) {
+    pub fn add_items(&mut self, items: Vec<f64>) {
         for item in items {
             if self.count() >= self.max_size {
                 let popped_value = self.queue.pop_front().unwrap();
@@ -80,12 +80,12 @@ impl RollingStats {
         self.queue.len() as u32
     }
 
-    fn average(&self) -> f32 {
-        self.sum / self.count() as f32
+    fn average(&self) -> f64 {
+        self.sum / self.count() as f64
     }
 
-    fn variance(&self) -> f32 {
-        (self.sum_squares - (self.sum.powi(2) / self.count() as f32)) / self.count() as f32
+    fn variance(&self) -> f64 {
+        (self.sum_squares - (self.sum.powi(2) / self.count() as f64)) / self.count() as f64
     }
 
     pub fn get_stats(&self) -> Option<StatsData> {
