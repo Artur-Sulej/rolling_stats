@@ -32,6 +32,7 @@ defmodule RollingStats.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:rustler, "~> 0.34.0"},
       {:phoenix, "~> 1.7.14"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
