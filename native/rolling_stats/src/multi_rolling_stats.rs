@@ -1,5 +1,6 @@
+use crate::rolling_stats::RollingStats;
+use crate::stats_data::StatsData;
 use std::collections::HashMap;
-use crate::rolling_stats::{RollingStats, StatsData};
 
 pub(crate) struct MultiRollingStats {
     stats_map: HashMap<u8, RollingStats>,
@@ -8,8 +9,14 @@ pub(crate) struct MultiRollingStats {
 
 impl MultiRollingStats {
     pub(crate) fn new(max_exponent: u8) -> Self {
-        let stats_map: HashMap<u8, RollingStats> =
-            (1..=max_exponent).map(|exponent| (exponent, RollingStats::new((10.0f64).powi(exponent as i32) as u32))).collect();
+        let stats_map: HashMap<u8, RollingStats> = (1..=max_exponent)
+            .map(|exponent| {
+                (
+                    exponent,
+                    RollingStats::new((10.0f64).powi(exponent as i32) as u32),
+                )
+            })
+            .collect();
 
         Self {
             stats_map,
@@ -19,7 +26,9 @@ impl MultiRollingStats {
 
     pub(crate) fn add_items(&mut self, items: Vec<f64>) {
         (1..=self.max_exponent).for_each(|exponent| {
-            self.stats_map.entry(exponent).and_modify(|stats| stats.add_items(items.clone()));
+            self.stats_map
+                .entry(exponent)
+                .and_modify(|stats| stats.add_items(items.clone()));
         });
     }
 

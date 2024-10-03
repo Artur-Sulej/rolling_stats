@@ -1,5 +1,6 @@
-use std::collections::{BTreeMap, VecDeque};
 use crate::sortable::Sortable;
+use crate::stats_data::StatsData;
+use std::collections::{BTreeMap, VecDeque};
 
 struct MinMaxIndex {
     items: BTreeMap<Sortable<f64>, u32>,
@@ -7,7 +8,9 @@ struct MinMaxIndex {
 
 impl MinMaxIndex {
     fn new() -> Self {
-        Self { items: BTreeMap::new() }
+        Self {
+            items: BTreeMap::new(),
+        }
     }
 
     fn insert_item(&mut self, key: f64) {
@@ -31,15 +34,6 @@ impl MinMaxIndex {
     fn get_max(&self) -> Option<f64> {
         self.items.keys().next_back().map(|value| value.0)
     }
-}
-
-#[derive(Debug)]
-pub struct StatsData {
-    average: f64,
-    variance: f64,
-    last: f64,
-    min: f64,
-    max: f64,
 }
 
 pub struct RollingStats {
