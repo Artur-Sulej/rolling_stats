@@ -5,7 +5,10 @@ defmodule RollingStatsWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", RollingStatsWeb do
+  scope "/", RollingStatsWeb do
     pipe_through :api
+
+    post "/add_batch", StatsController, :add_batch
+    get "/stats", StatsController, :get_stats
   end
 end
